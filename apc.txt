@@ -1,0 +1,99 @@
+#Admin Login
+CREATE TABLE admin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_id VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+
+//admin room (rooms)
+CREATE TABLE `rooms` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `room_no` varchar(10) DEFAULT NULL,
+  `type` ENUM('AC', 'Non-AC') NOT NULL DEFAULT 'Non-AC',
+  `room_holders` varchar(255) DEFAULT NULL,
+  `room_status` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
+
+// student_log
+CREATE TABLE IF NOT EXISTS `student_log` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `guardian_name` VARCHAR(100) NOT NULL,
+  `guardian_mobile` VARCHAR(15) NOT NULL,
+  `user_mobile` VARCHAR(15) NOT NULL,
+  `course` VARCHAR(100) NOT NULL,
+  `college_year` VARCHAR(10) NOT NULL,
+  `college_name` VARCHAR(100) NOT NULL,
+  `birthday` DATE NOT NULL,
+  `age` INT NOT NULL,
+  `address` TEXT NOT NULL,
+  `starting_date` DATE NOT NULL,
+  `status` INT DEFAULT 0,
+  `room_number` VARCHAR(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+
+fees
+
+CREATE TABLE fees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
+    KEY 'student_id'  (students_id)
+);
+
+
+CREATE TABLE IF NOT EXISTS `fees` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `student_id` int NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `student_id` (`student_id`)
+);
+
+
+complaints
+
+CREATE TABLE complaints (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    student_name VARCHAR(100) NOT NULL,
+    complaint TEXT NOT NULL,
+    status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
+    created_at datetime DEFAULT CURRENT_TIMESTAMP
+);
+
+leave 
+
+CREATE TABLE leave_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason TEXT NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    FOREIGN KEY (student_id) REFERENCES student_log(id)
+);
+
+
+notification
+
+CREATE TABLE notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    message TEXT NOT NULL,
+    student_id INT, -- NULL means sent to all students
+    status TINYINT(1) DEFAULT 0, -- 0 = Unread, 1 = Read
+    date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
